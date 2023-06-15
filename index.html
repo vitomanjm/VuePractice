@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@next"></script>
+    <div id="app"></div>
+    <script>
+        const vm = Vue.createApp({
+            data() {
+                return {
+                    text: "Accede a tu cuenta",
+                    open: false,
+                    username: "",
+                    posts: [
+                    {
+                    title: "Titulo 1",
+                    description: "Lorem ipsum dolor sit amet"
+                    },
+                ],
+                    Nombre: "",
+                    Correo: "",
+                    NumeroDeContacto: "",
+                    Save: false,
+                };
+            },
+            watch: {
+                open(value) {
+                    if (value) {
+                        this.text = "Cierra sesión";
+                    } else {
+                        this.text = "Accede a tu cuenta";
+                        this.username = "";
+                    }
+                },
+
+                Save(){
+                    return {
+                    Nombre: this.Nombre,
+                    Correo: this.Correo,
+                    NumeroDeContacto: this.NumeroDeContacto,
+                    }
+                }
+        },
+            computed: {
+                label() {
+                    return this.open ? "Salir" : "Acceder";
+                },
+                styles() {
+                    return this.open ? ['open'] : ['closed'];
+                }
+            },
+            template: `
+    <div class="container" :class="styles">
+        
+        <div v-if="open">
+            <h1 class="saludo">Hola, {{ username }}</h1>               
+            
+            <div class="formContainer">
+            <form class="forma">
+            <label class="flabel" >Nombre:</label>
+            <input v-model="Nombre"  type="text" >
+            <label class="flabel" >Correo:</label>
+            <input v-model="Correo" type="text">
+            <label class="flabel" >Numero de Contacto:</label>
+            <input v-model="NumeroDeContacto" type="text">
+            </form>  
+            </div>     
+            <input value="Save" type="button" class="SaveButton" @click="Save">
+            </input>         
+        </div>
+        
+        <div v-else>
+            <div>Username</div>
+            <input type="text" v-model="username" />    
+        </div>
+    
+        <h2>{{ text }}</h2>
+        <button @click="open = !open">
+            <div v-if="!open">Acceder</div>
+            <div v-else>Salir</div>
+        </button>
+    
+        <ContentDisp>
+            <div v-if="Save" class="item"> 
+                    <div class="title"> Datos de Contacto   
+                        <p class="content">{{Nombre}}</p>
+                        <p class="content">{{Correo}}</p> 
+                        <p class="content">{{NumeroDeContacto}}</p>  
+                    </div> 
+            </div>   
+        </ContentDisp>
+
+    </div>
+    `
+});
+
+
+    vm.component("ContentDisp", {
+
+        props: {
+                    Nombre: this.Nombre,
+                    Correo: this.Correo,
+                    NumeroDeContacto: this.NumeroDeContacto,
+        },
+
+        template:
+
+        `<div class="list">             
+        </div>
+        `
+        
+    });
+
+        const app = vm.mount("#app");
+
+    </script>
+
+
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #app, .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            margin-top: 20px;
+            border: none;
+            background-color: white;
+            padding: 8px 24px;
+            border-radius: 12px;
+        }
+        .closed {
+            background-color: #eca1a6;
+        }
+        .open {
+            background-color: #b5e7a0;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            background-color:blanchedalmond;
+        }
+        .item {
+            border: 1px solid #e5e5e5;
+        }
+        .saludo{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 1rem;
+            margin-top: 1rem;   
+        }
+        .title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 1rem;
+            margin-top: 1rem;   
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            margin-top: 1rem;   
+        }
+
+        .formContainer
+        {   
+            display: flex;
+            padding: 1rem;
+        }
+        .forma {
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .flabel{
+            padding: 0.5em;
+            margin: 0.5rem;
+        }
+        .SaveButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction:column;
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-left: 5rem;
+        }
+
+        .content-disp {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</body>
+</html>
